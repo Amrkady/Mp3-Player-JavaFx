@@ -5,7 +5,9 @@
  */
 package mp3;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -45,7 +48,7 @@ public class Mp_3 extends Application {
     @Override
     public void start(Stage primaryStage) {
      root.setMinSize(448, 320);
-
+   Controller cl=new Controller();
         MenuBar menuBar = new MenuBar();
        Menu menu = new Menu();
        ImageView file = new ImageView(
@@ -56,10 +59,10 @@ public class Mp_3 extends Application {
         MenuItem openFile = new MenuItem("open file");
         
         menu.getItems().add(openFile);
-        //openFile.setOnAction(e -> cl.openFile());
+       openFile.setOnAction(e -> cl.openFile());
         MenuItem openDurectory = new MenuItem("open Dir");
         menu.getItems().add(openDurectory);
-       // openDurectory.setOnAction(e -> cl.openMultiFiles());
+       openDurectory.setOnAction(e -> cl.openMultiFiles());
 
         menuBar.getMenus().add(menu);
 //         Button vislist = new Button();
@@ -252,7 +255,71 @@ public class Mp_3 extends Application {
         primaryStage.show();
     }
 
-    /**
+     public class Controller {
+   
+    public void openFile() {
+        count2=1;
+        try{
+
+        FileChooser fc = new FileChooser();
+        //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp3"));
+        File chosen = fc.showOpenDialog(null);
+        String path = chosen.getAbsolutePath();
+        listview.getItems().clear();
+        listview.getItems().add(chosen.getName());
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+
+        media = new Media(new File(path).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+        
+//             volumeSlider();
+//             timeSlider();
+//              timer();
+        }
+        catch (Exception ex){}
+       
+    }
+
+    public void openMultiFiles() {
+         count2=1;
+        try{
+        arraylist = new ArrayList<>();
+        FileChooser fc = new FileChooser();
+        
+        List<File> chosen = fc.showOpenMultipleDialog(null);
+
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+       // listview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listview.getItems().clear();
+        for (int i = 0; i < chosen.size(); i++) {
+            arraylist.add(chosen.get(i).getAbsolutePath());
+             
+            listview.getItems().add(chosen.get(i).getName());
+              
+ 
+
+        }
+ 
+        String path = chosen.get(0).getAbsolutePath();
+
+        media = new Media(new File(path).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+//        timer();
+//
+//       volumeSlider();
+//       timeSlider();
+
+        }
+        catch (Exception ex){}
+  
+    }
+     }    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {

@@ -1,36 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mp3;
 
+
+
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.time;
+import java.awt.Color;
 import java.io.File;
+import static java.lang.Math.floor;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import static javafx.application.Application.launch;
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.scene.image.Image;
+
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+
 import javafx.scene.layout.StackPane;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
+
 import javafx.stage.FileChooser;
+
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.swing.JTable;
 
-/**
- *
- * @author alkady
- */
 public class Mp_3 extends Application {
-     GridPane pn=new GridPane();
+    //JTable tb=new JTable ();
+    GridPane pn=new GridPane();
    StackPane root = new StackPane();
-     Label songTimer;
+   Label songTimer;
    Label time;
    ImageView imagePlay;
    Button play;
@@ -43,12 +51,18 @@ public class Mp_3 extends Application {
     Duration duration;
     private static final double MIN_CHANGE = 0.5;
     ArrayList<String> arraylist;
-    int count= 0, count2=0;
-
+    int count= 0, count2=0,count3=0;
+      private Listplay ls; 
+    
     @Override
     public void start(Stage primaryStage) {
-     root.setMinSize(448, 320);
-   Controller cl=new Controller();
+          ls=new Listplay ();
+        //HBox hb=new HBox();
+        Controller cl=new Controller();
+                
+        
+        root.setMinSize(448, 380);
+
         MenuBar menuBar = new MenuBar();
        Menu menu = new Menu();
        ImageView file = new ImageView(
@@ -59,31 +73,26 @@ public class Mp_3 extends Application {
         MenuItem openFile = new MenuItem("open file");
         
         menu.getItems().add(openFile);
-       openFile.setOnAction(e -> cl.openFile());
+        openFile.setOnAction(e -> cl.openFile());
         MenuItem openDurectory = new MenuItem("open Dir");
         menu.getItems().add(openDurectory);
-       openDurectory.setOnAction(e -> cl.openMultiFiles());
+        openDurectory.setOnAction(e -> cl.openMultiFiles());
 
         menuBar.getMenus().add(menu);
-//         Button vislist = new Button();
-//            vislist.setStyle("-fx-background-color:#3e3737");
-//           vislist.setTranslateX(410);
-//           vislist.setTranslateY(-145);
-//          root.getChildren().add(vislist);
+
         
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
-        menuBar.setMaxSize(400, 20);
-        menuBar.setStyle("-fx-background-color:#3e3737");//
-        menuBar.setTranslateX(-20);
-        menuBar.setTranslateY(-145);
+        menuBar.setMaxSize(50, 40);
+        menuBar.setStyle("-fx-background-color:#ff8c00");//#3e3737
+        menuBar.setTranslateX(-200);
+        menuBar.setTranslateY(-170);
 
         root.getChildren().add(menuBar);
          play = new Button();
-//        play.setStyle("-fx-background-color:#3e3737");
-//        play.setOnAction(e ->cl.play());
+
        
         play.setTranslateX(-128);
-        play.setTranslateY(110);
+        play.setTranslateY(130);
          imagePlay = new ImageView(
                 new Image("images/play.png"));
         imagePlay.setFitWidth(45);
@@ -91,47 +100,69 @@ public class Mp_3 extends Application {
         play.setGraphic(imagePlay);
         root.getChildren().add(play);
 
-//        Button stop = new Button();
-//        stop.setStyle("-fx-background-color:#3e3737");
-//        stop.setOnAction(e -> cl.stop());
-//        stop.setTranslateX(-50);
-//        stop.setTranslateY(60);
+        //////////////////////////////
+         Button viewlist = new Button();
+        ImageView imageviewlist = new ImageView(
+                new Image("images/List.png"));
+        imageviewlist.setFitWidth(25);
+        imageviewlist.setFitHeight(30);
+        viewlist.setGraphic(imageviewlist);
+        
+        viewlist.setStyle("-fx-background-color:#ff8c00");
+       
+          viewlist.setTranslateX(-107);
+          viewlist.setTranslateY(-170);
+          
+         root.getChildren().add(viewlist);
+        ////////////////
+        Button add = new Button();
+        ImageView imageadd = new ImageView(
+                new Image("images/add.png"));
+        imageadd.setFitWidth(25);
+        imageadd.setFitHeight(30);
+        add.setGraphic(imageadd);
+        
+        add.setStyle("-fx-background-color:#ff8c00");
+         add.setOnAction(e -> cl.add());
+          add.setTranslateX(-150);
+          add.setTranslateY(-170);
+          
+         root.getChildren().add(add);
         ImageView imageStop = new ImageView(
                 new Image("images/stop.png"));
         imageStop.setFitWidth(45);
         imageStop.setFitHeight(45);
-//        stop.setGraphic(imageStop);
-//        root.getChildren().add(stop);
+
 ///////////////////////////////////////////////////////////////////////
         
         
-       // play = new Button();
+    
         play.setStyle("-fx-background-color:#3e3737");
-//        play.setOnAction(e ->
-//        {
-//            if(count2==1){
-//            MediaPlayer.Status status = mediaPlayer.getStatus();
-//
-//    if (status == MediaPlayer.Status.PAUSED
-//         || status == MediaPlayer.Status.READY
-//         || status == MediaPlayer.Status.STOPPED) {
-//
-//           mediaPlayer.play();
-//            play.setGraphic(imagePlay);
-//
-//                   } else {
-//                   mediaPlayer.pause();
-//                play.setGraphic(imageStop);
-//           }
-//            }
-//        }//
-       // );
+        play.setOnAction(e ->
+        {
+            if(count2==1){
+            Status status = mediaPlayer.getStatus();
+
+    if (status == Status.PAUSED
+         || status == Status.READY
+         || status == Status.STOPPED) {
+
+           mediaPlayer.play();
+            play.setGraphic(imagePlay);
+
+                   } else {
+                   mediaPlayer.pause();
+                play.setGraphic(imageStop);
+           }
+            }
+        }//
+        );
         //////////////////////////////////////////////////////
         Button replay = new Button();
         replay.setStyle("-fx-background-color:#3e3737");
-        //replay.setOnAction(e -> cl.replay());
+        replay.setOnAction(e -> cl.replay());
         replay.setTranslateX(-72);
-        replay.setTranslateY(110);
+        replay.setTranslateY(130);
         ImageView imageReplay = new ImageView(
                 new Image("images/replay.png"));
         imageReplay.setFitWidth(45);
@@ -141,9 +172,9 @@ public class Mp_3 extends Application {
 
         Button backword = new Button();
         backword.setStyle("-fx-background-color:#3e3737");
-//        backword.setOnAction(e -> cl.back());
+        backword.setOnAction(e -> cl.back());
         backword.setTranslateX(-180);
-        backword.setTranslateY(110);
+        backword.setTranslateY(130);
         ImageView imageBackword = new ImageView(
                 new Image("images/back.png"));
         imageBackword.setFitWidth(45);
@@ -153,9 +184,9 @@ public class Mp_3 extends Application {
 
          forward = new Button();
          forward.setStyle("-fx-background-color:#3e3737");
-       // forward.setOnAction(e -> cl.forward());
+        forward.setOnAction(e -> cl.forward());
         forward.setTranslateX(-15);
-        forward.setTranslateY(110);
+        forward.setTranslateY(130);
          ImageView imageForward = new ImageView(
                 new Image("images/forward.png"));
         // imageForward.setStyle("-fx-background-color:gray");
@@ -167,12 +198,12 @@ public class Mp_3 extends Application {
         volslider = new Slider();
         volslider.setMaxSize(100, 10);
         volslider.setTranslateX(150);
-        volslider.setTranslateY(110);
+        volslider.setTranslateY(130);
         root.getChildren().add(volslider);
         
          Label soundImage=new Label();
          soundImage.setTranslateX(75);
-         soundImage.setTranslateY(110);
+         soundImage.setTranslateY(130);
          
         ImageView imageSound = new ImageView(
                 new Image("images/sound.png"));
@@ -180,24 +211,82 @@ public class Mp_3 extends Application {
         imageSound.setFitHeight(45);
         soundImage.setGraphic(imageSound);
         root.getChildren().add(soundImage);
-        
-        
-         listview = new ListView<String>();
-        listview.setMaxSize(450, 200);
-        listview.setTranslateX(10);
-        listview.setTranslateY(-20);
-        listview.setStyle("-fx-background-color:darkgray");
-        root.getChildren().add(listview);
-         //    listPlay();
+          StackPane root2 = new StackPane();
+          
+          ImageView imagemusic = new ImageView(
+                new Image("images/music.png"));
+         imagemusic.setFitWidth(220);
          
-//        
+         imagemusic.setFitHeight(240);
+         imagemusic.setTranslateX(-120);
+         imagemusic.setTranslateY(-30);
+         
+          Label songname=new Label("Player");
+         songname.setScaleX(3);
+         songname.setScaleY(3);
+         
+         songname.setStyle("-fx-text-fill:#ff8c00;");
+         songname.setTranslateX(-20);
+         songname.setTranslateY(-30);
+         //imagemusic.setGraphic(imagemusic);
+//          if(count2==1){
+//            Status status = mediaPlayer.getStatus();
+//
+//       if (status == Status.PAUSED
+//         || status == Status.PLAYING)
+//          {
+//              double index=listview.getSelectionModel().getSelectedIndex();
+//             // mediaPlayer.
+//              
+//          }}
         
-        //hb.getChildren().add(root);
-        //pn.add(root,0, 1);
+         Label mp3=new Label("MP3");
+         mp3.setScaleX(3);
+         mp3.setScaleY(3);
+         
+         mp3.setStyle("-fx-text-fill:#ff8c00;");
+         mp3.setTranslateX(-70);
+         mp3.setTranslateY(-80);
+            listview = new ListView<String>();
+        listview.setMaxSize(270, 240);
+        //listview.setTranslateX(150);
+        //listview.setTranslateY(-30);
+        listview.setStyle("-fx-background-color:darkgray");
+        root.getChildren().add(imagemusic);
+        StackPane root3=new StackPane();
+          root3.getChildren().add(songname);
+          root3.getChildren().add(mp3);
+             cl.listPlay();
+         
         
+            viewlist.setOnAction(e -> 
+             {
+                if(count3==0) 
+                {
+                   count3=1; 
+                   root3.getChildren().removeAll(songname,mp3);
+                   root3.getChildren().add(listview);
+                 }
+                 else
+                {
+                 root3.getChildren().add(songname);
+                 root3.getChildren().add(mp3);
+                 root3.getChildren().removeAll(listview);
+                 count3=0;   
+                }  
+             });
+//            
+             
+             root3.setMaxSize(270,240);
+             root3.setTranslateX(140);
+             root3.setTranslateY(-30);
+           //  root3.getChildren().add(listview);
+             root.getChildren().add(root3);
+
          Label clockImage=new Label();
          clockImage.setTranslateX(-195);
-         clockImage.setTranslateY(180);
+         clockImage.setTranslateY(220);
+         
         ImageView imageTime = new ImageView(
                 new Image("images/clock.png"));
         imageTime.setFitWidth(40);
@@ -205,12 +294,12 @@ public class Mp_3 extends Application {
         clockImage.setGraphic(imageTime);
         
       // pn.add(clockImage, 0, 2);
-        StackPane root2 = new StackPane();
+       
         root.getChildren().add(clockImage);
    
         Label songtime=new Label();
-        songtime.setTranslateX(145);
-        songtime.setTranslateY(180);
+        songtime.setTranslateX(155);
+        songtime.setTranslateY(220);
         songtime.setText("/");
           ImageView imageTimer = new ImageView(
                 new Image("images/slash.png"));
@@ -221,42 +310,62 @@ public class Mp_3 extends Application {
         timeslider = new Slider();
         timeslider.setMaxSize(250, 10);
         timeslider.setTranslateX(-40);
-        timeslider.setTranslateY(180);
+        timeslider.setTranslateY(220);
         root.getChildren().add(timeslider);
         
-         //hb.getChildren().add(root2);
-         //pn.add(root2, 0, 1);
-        //time();
+         
          pn.setStyle("-fx-background-color:#3e3737");//221f1f//3e3737
        // pn.setStyle();
        /////////////////////////////////////////////////////////////////////////////////////////
          
-         //time.setTextFill(Color.YELLOW);
+        
          
            time =new Label();
         time.setStyle("-fx-background-color:gray");
                time.setScaleX(1.6);
                time.setScaleY(1.6);
-             time.setTranslateX(135);
-            time.setTranslateY(180);
+             time.setTranslateX(145);
+            time.setTranslateY(220);
             root.getChildren().add(time);
-         // time.setPrefWidth(80);
- 
         
-         
-         
           pn.add(root,0, 0);
-        Scene scene = new Scene(pn, 460, 400);
+        Scene scene = new Scene(pn, 500, 460);
          
         primaryStage.setTitle("mp3 player");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        
+        //primaryStage.getFullScreenExitHint();
+      
         primaryStage.show();
     }
 
-     public class Controller {
-   
+
+     public class Listplay implements Runnable
+     {
+
+        @Override
+        public void run() {
+             Controller cl=new Controller();
+                if(count2==1)
+           {
+       cl.forward();
+           }
+         
+         
+             
+        }
+    }
+    public class Controller {  
+    public void add() {
+         try{
+       FileChooser fc = new FileChooser();
+        File chosen = fc.showOpenDialog(null);
+        String path = chosen.getAbsolutePath();
+        listview.getItems().add(chosen.getName());
+         arraylist.add(path);
+         }catch (Exception  ex)
+                 {}
+    }
     public void openFile() {
         count2=1;
         try{
@@ -274,10 +383,10 @@ public class Mp_3 extends Application {
         media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
-        
-//             volumeSlider();
-//             timeSlider();
-//              timer();
+        // time();
+             volumeSlider();
+             timeSlider();
+              timer();
         }
         catch (Exception ex){}
        
@@ -301,29 +410,255 @@ public class Mp_3 extends Application {
              
             listview.getItems().add(chosen.get(i).getName());
               
- 
+            
+
 
         }
- 
+        
+
         String path = chosen.get(0).getAbsolutePath();
 
         media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
-//        timer();
-//
-//       volumeSlider();
-//       timeSlider();
+         
+          mediaPlayer.setOnEndOfMedia(ls);
+        timer();
+
+       volumeSlider();
+       timeSlider();
 
         }
         catch (Exception ex){}
   
     }
-     }    /**
-     * @param args the command line arguments
-     */
+
+    public void replay() {
+      
+        try{
+        mediaPlayer.seek(mediaPlayer.getStartTime());
+        mediaPlayer.play();
+        }
+        catch (Exception ex){}
+    }
+
+    public void back() {
+        try{
+        if (count > 0) {
+            --count;
+            mediaPlayer.stop();
+            String path = arraylist.get(count);
+            media = new Media(new File(path).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            volumeSlider();
+           timer();
+            timeSlider();
+        }
+        }
+        catch (Exception ex){}
+
+    }
+
+    public void forward() {
+        try{
+        if (count < arraylist.size() - 1) {
+            ++count;
+            mediaPlayer.stop();
+            String path = arraylist.get(count);
+            media = new Media(new File(path).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            
+        
+            mediaPlayer.play();
+             mediaPlayer.setOnEndOfMedia(ls);
+          volumeSlider();
+           timer();
+           timeSlider();
+        }
+        }
+        catch (Exception ex){}
+
+    }
+
+    public void play() {
+        try{
+             mediaPlayer.play();
+          
+       
+        }
+        catch (Exception ex){}
+    }
+
+    public void stop() {
+        try{
+        mediaPlayer.pause();
+        }
+        catch (Exception ex){}
+    }
+    
+     public void timeSlider()
+    {
+    
+    try{
+        mediaPlayer.totalDurationProperty().addListener((obs, oldDuration, newDuration) -> timeslider.setMax(newDuration.toSeconds()));
+
+        timeslider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
+            if (!isChanging) {
+                mediaPlayer.seek(Duration.seconds(timeslider.getValue()));
+            }
+        });
+
+        timeslider.valueProperty().addListener((obs, oldValue, newValue) -> {
+            if (!timeslider.isValueChanging()) {
+                double currentTime = mediaPlayer.getCurrentTime().toSeconds();
+                if (Math.abs(currentTime - newValue.doubleValue()) > MIN_CHANGE) {
+                    mediaPlayer.seek(Duration.seconds(newValue.doubleValue()));
+                }
+            }
+        });
+
+        mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
+            if (!timeslider.isValueChanging()) {
+                timeslider.setValue(newTime.toSeconds());
+            }
+        
+        });
+    }
+    catch (Exception ex){}
+    }
+    
+    public void volumeSlider()
+    {
+    try{
+      volslider.setValue(mediaPlayer.getVolume() *200);
+        volslider.valueProperty().addListener(new InvalidationListener() {
+
+            @Override
+            public void invalidated(javafx.beans.Observable observable) {
+                mediaPlayer.setVolume(volslider.getValue() /200);
+            }
+        });
+    }
+    catch (Exception ex){}
+    }
+
+  public void updateValues() {
+     if (time != null && timeslider != null && duration != null) {
+         Platform.runLater(() -> {
+            Duration currentTime = mediaPlayer.getCurrentTime();
+            time.setText(formatTime(currentTime, duration));
+            timeslider.setDisable(duration.isUnknown());
+            if (!timeslider.isDisabled() && duration.greaterThan(Duration.ZERO) && !timeslider.isValueChanging()) {
+                timeslider.setValue(currentTime.toSeconds());
+    }
+});
+}
+}
+   private  String formatTime(Duration elapsed, Duration duration) {
+     int intElapsed = (int) floor(elapsed.toSeconds());
+     int elapsedHours = intElapsed / (60 * 60);
+     
+        if (elapsedHours > 0) {
+              intElapsed -= elapsedHours * 60 * 60;
+            }
+        
+       int elapsedMinutes = intElapsed / 60;
+       int elapsedSeconds = intElapsed - elapsedHours * 60 * 60 - elapsedMinutes * 60;
+
+        if (duration.greaterThan(Duration.ZERO)) {
+               int intDuration = (int) floor(duration.toSeconds());
+               int durationHours = intDuration / (60 * 60);
+        if (durationHours > 0) {
+              intDuration -= durationHours * 60 * 60;
+        }
+        
+        int durationMinutes = intDuration / 60;
+        int durationSeconds = intDuration - durationHours * 60 * 60 - durationMinutes * 60;
+        if (durationHours > 0) {
+              return String.format("%d:%02d:%02d/%d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds,
+                 durationHours, durationMinutes, durationSeconds);
+        } else 
+            {
+            return String.format("%02d:%02d/%02d:%02d",
+            elapsedMinutes, elapsedSeconds, durationMinutes,durationSeconds);
+            }
+            } else {
+                 if (elapsedHours > 0) {
+                    return String.format("%d:%02d:%02d", elapsedHours,
+                    elapsedMinutes, elapsedSeconds);
+                   } else
+                     {
+                     return String.format("%02d:%02d", elapsedMinutes,elapsedSeconds);
+                     }
+    }
+   }
+         public   void listPlay()
+    {    
+        
+        listview.setOnMouseClicked((MouseEvent e) ->
+        {
+           if(e.getClickCount()>1)
+           {
+             // arraylist.add(chosen.get(0).getAbsolutePath());
+              String path=listview.getSelectionModel().getSelectedItem();
+               double index=listview.getSelectionModel().getSelectedIndex();
+               for (int i = 0; i < arraylist.size(); i++) {
+                   if(i==index)
+                   {
+                    Status status = mediaPlayer.getStatus();
+                     path=arraylist.get(i);
+                     if (status == Status.PAUSED
+                     || status == Status.READY
+                       || status == Status.PLAYING ) 
+                         {
+                           mediaPlayer.stop();
+                         }
+                     Controller cl=new Controller();
+                     media = new Media(new File(path).toURI().toString());
+                     mediaPlayer = new MediaPlayer(media);
+                     mediaPlayer.play();
+                      cl.volumeSlider();
+                      cl.timeSlider();
+                        timer();
+                        play.setGraphic(imagePlay);
+                        count=listview.getSelectionModel().getSelectedIndex();
+                        mediaPlayer.setOnEndOfMedia(ls);
+                     listview.getSelectionModel().clearSelection();
+                     
+                   }
+                   
+               }
+               
+           
+           }
+        
+        
+        });
+        
+        
+         
+    }
+           public void timer() {
+        mediaPlayer.currentTimeProperty().addListener((Observable ov) -> {
+            updateValues();
+        });
+        
+        mediaPlayer.setOnReady(() -> {
+            duration = mediaPlayer.getMedia().getDuration();
+            updateValues();
+        });
+        
+        /////////////////////////////////////////////////
+    }
+  
+
+    }    
+   // Duration currentTime = mediaPlayer.getCurrentTime();
+    //time.setText(formatTime(currentTime, duration));
     public static void main(String[] args) {
         launch(args);
     }
+
     
 }

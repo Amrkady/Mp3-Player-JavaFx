@@ -5,7 +5,9 @@
  */
 package mp3;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -45,7 +48,7 @@ public class Mp_3 extends Application {
     @Override
     public void start(Stage primaryStage) {
      root.setMinSize(448, 320);
-
+       Controller cl=new Controller();
         MenuBar menuBar = new MenuBar();
        Menu menu = new Menu();
        ImageView file = new ImageView(
@@ -56,17 +59,13 @@ public class Mp_3 extends Application {
         MenuItem openFile = new MenuItem("open file");
         
         menu.getItems().add(openFile);
-        //openFile.setOnAction(e -> cl.openFile());
+        openFile.setOnAction(e -> cl.openFile());
         MenuItem openDurectory = new MenuItem("open Dir");
         menu.getItems().add(openDurectory);
-       // openDurectory.setOnAction(e -> cl.openMultiFiles());
+//       openDurectory.setOnAction(e -> cl.openMultiFiles());
 
         menuBar.getMenus().add(menu);
-//         Button vislist = new Button();
-//            vislist.setStyle("-fx-background-color:#3e3737");
-//           vislist.setTranslateX(410);
-//           vislist.setTranslateY(-145);
-//          root.getChildren().add(vislist);
+
         
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
         menuBar.setMaxSize(400, 20);
@@ -88,11 +87,7 @@ public class Mp_3 extends Application {
         play.setGraphic(imagePlay);
         root.getChildren().add(play);
 
-//        Button stop = new Button();
-//        stop.setStyle("-fx-background-color:#3e3737");
-//        stop.setOnAction(e -> cl.stop());
-//        stop.setTranslateX(-50);
-//        stop.setTranslateY(60);
+//     
         ImageView imageStop = new ImageView(
                 new Image("images/stop.png"));
         imageStop.setFitWidth(45);
@@ -221,9 +216,6 @@ public class Mp_3 extends Application {
         timeslider.setTranslateY(180);
         root.getChildren().add(timeslider);
         
-         //hb.getChildren().add(root2);
-         //pn.add(root2, 0, 1);
-        //time();
          pn.setStyle("-fx-background-color:#3e3737");//221f1f//3e3737
        // pn.setStyle();
        /////////////////////////////////////////////////////////////////////////////////////////
@@ -255,6 +247,36 @@ public class Mp_3 extends Application {
     /**
      * @param args the command line arguments
      */
+    public class Controller {
+   
+    public void openFile() {
+        count2=1;
+        try{
+
+        FileChooser fc = new FileChooser();
+        //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp3"));
+        File chosen = fc.showOpenDialog(null);
+        String path = chosen.getAbsolutePath();
+        listview.getItems().clear();
+        listview.getItems().add(chosen.getName());
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+
+        media = new Media(new File(path).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+      
+//             volumeSlider();
+//             timeSlider();
+//              timer();
+        }
+        catch (Exception ex){}
+       
+    }
+
+   
+    }
     public static void main(String[] args) {
         launch(args);
     }

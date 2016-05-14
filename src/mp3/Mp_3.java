@@ -2,8 +2,7 @@ package mp3;
 
 
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.time;
-import java.awt.Color;
+
 import java.io.File;
 import static java.lang.Math.floor;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.stage.DirectoryChooser;
 
 import javafx.stage.FileChooser;
 
@@ -52,6 +52,7 @@ public class Mp_3 extends Application {
     private static final double MIN_CHANGE = 0.5;
     ArrayList<String> arraylist;
     int count= 0, count2=0,count3=0;
+    boolean flag=true;
       private Listplay ls; 
     
     @Override
@@ -76,7 +77,7 @@ public class Mp_3 extends Application {
         openFile.setOnAction(e -> cl.openFile());
         MenuItem openDurectory = new MenuItem("open Dir");
         menu.getItems().add(openDurectory);
-        openDurectory.setOnAction(e -> cl.openMultiFiles());
+        openDurectory.setOnAction(e -> cl.openDirectory());
 
         menuBar.getMenus().add(menu);
 
@@ -87,7 +88,8 @@ public class Mp_3 extends Application {
         menuBar.setTranslateX(-200);
         menuBar.setTranslateY(-170);
 
-        root.getChildren().add(menuBar);
+       
+       root.getChildren().add(menuBar);
          play = new Button();
 
        
@@ -110,10 +112,28 @@ public class Mp_3 extends Application {
         
         viewlist.setStyle("-fx-background-color:#ff8c00");
        
-          viewlist.setTranslateX(-107);
+          viewlist.setTranslateX(-61);
           viewlist.setTranslateY(-170);
           
          root.getChildren().add(viewlist);
+         /////////////////////////
+          Button removeSong = new Button();
+        ImageView removeimage = new ImageView(
+                new Image("images/delete.png"));
+        removeimage.setFitWidth(30);
+        removeimage.setFitHeight(30);
+        removeSong.setGraphic(removeimage);
+        
+        removeSong.setStyle("-fx-background-color:#ff8c00");
+         
+          removeSong.setTranslateX(-105);
+          removeSong.setTranslateY(-170);
+          
+         root.getChildren().add(removeSong);
+//         removeSong.setOnAction(e ->
+//        { 
+//            cl.removesong();
+//        });
         ////////////////
         Button add = new Button();
         ImageView imageadd = new ImageView(
@@ -172,7 +192,7 @@ public class Mp_3 extends Application {
 
         Button backword = new Button();
         backword.setStyle("-fx-background-color:#3e3737");
-        backword.setOnAction(e -> cl.back());
+        backword.setOnAction(e -> cl.backward());
         backword.setTranslateX(-180);
         backword.setTranslateY(130);
         ImageView imageBackword = new ImageView(
@@ -201,16 +221,35 @@ public class Mp_3 extends Application {
         volslider.setTranslateY(130);
         root.getChildren().add(volslider);
         
-         Label soundImage=new Label();
-         soundImage.setTranslateX(75);
-         soundImage.setTranslateY(130);
-         
+         //Label soundImage=new Label();
+//         soundImage.setTranslateX(75);
+//         soundImage.setTranslateY(130);
+          
+         Button sound=new Button();
+            sound.setTranslateX(65);
+         sound.setTranslateY(130);
+         sound.setStyle("-fx-background-color:#3e3737");
+       // sound.setFitWidth(45);
+       // sound.setFitHeight(45);
+         sound.setOnAction(e -> {
+             if(flag){
+                 flag=false;
+                 cl.muteSound();
+             }
+             else
+             {
+                 flag=true;
+                volslider.setValue(200);
+             }
+           
+         });
         ImageView imageSound = new ImageView(
                 new Image("images/sound.png"));
         imageSound.setFitWidth(45);
         imageSound.setFitHeight(45);
-        soundImage.setGraphic(imageSound);
-        root.getChildren().add(soundImage);
+          sound.setGraphic(imageSound);
+           root.getChildren().add(sound);
+        //root.getChildren().add(soundImage);
           StackPane root2 = new StackPane();
           
           ImageView imagemusic = new ImageView(
@@ -229,17 +268,7 @@ public class Mp_3 extends Application {
          songname.setTranslateX(-20);
          songname.setTranslateY(-30);
          //imagemusic.setGraphic(imagemusic);
-//          if(count2==1){
-//            Status status = mediaPlayer.getStatus();
-//
-//       if (status == Status.PAUSED
-//         || status == Status.PLAYING)
-//          {
-//              double index=listview.getSelectionModel().getSelectedIndex();
-//             // mediaPlayer.
-//              
-//          }}
-        
+//          
          Label mp3=new Label("MP3");
          mp3.setScaleX(3);
          mp3.setScaleY(3);
@@ -253,9 +282,9 @@ public class Mp_3 extends Application {
         //listview.setTranslateY(-30);
         listview.setStyle("-fx-background-color:darkgray");
         root.getChildren().add(imagemusic);
-        StackPane root3=new StackPane();
-          root3.getChildren().add(songname);
-          root3.getChildren().add(mp3);
+        StackPane root_2=new StackPane();
+          root_2.getChildren().add(songname);
+          root_2.getChildren().add(mp3);
              cl.listPlay();
          
         
@@ -264,24 +293,24 @@ public class Mp_3 extends Application {
                 if(count3==0) 
                 {
                    count3=1; 
-                   root3.getChildren().removeAll(songname,mp3);
-                   root3.getChildren().add(listview);
+                   root_2.getChildren().removeAll(songname,mp3);
+                   root_2.getChildren().add(listview);
                  }
                  else
                 {
-                 root3.getChildren().add(songname);
-                 root3.getChildren().add(mp3);
-                 root3.getChildren().removeAll(listview);
+                 root_2.getChildren().add(songname);
+                 root_2.getChildren().add(mp3);
+                 root_2.getChildren().removeAll(listview);
                  count3=0;   
                 }  
              });
 //            
              
-             root3.setMaxSize(270,240);
-             root3.setTranslateX(140);
-             root3.setTranslateY(-30);
-           //  root3.getChildren().add(listview);
-             root.getChildren().add(root3);
+             root_2.setMaxSize(270,240);
+             root_2.setTranslateX(140);
+             root_2.setTranslateY(-30);
+           //  root_2.getChildren().add(listview);
+             root.getChildren().add(root_2);
 
          Label clockImage=new Label();
          clockImage.setTranslateX(-195);
@@ -392,12 +421,13 @@ public class Mp_3 extends Application {
        
     }
 
-    public void openMultiFiles() {
+    public void openDirectory() {
          count2=1;
         try{
         arraylist = new ArrayList<>();
+         //  DirectoryChooser chooser = new DirectoryChooser();
+       // chooser.setInitialDirectory(Datastore.getInstance().getDataDir().toFile());
         FileChooser fc = new FileChooser();
-        
         List<File> chosen = fc.showOpenMultipleDialog(null);
 
         if (mediaPlayer != null) {
@@ -442,7 +472,7 @@ public class Mp_3 extends Application {
         catch (Exception ex){}
     }
 
-    public void back() {
+    public void backward() {
         try{
         if (count > 0) {
             --count;
@@ -652,8 +682,39 @@ public class Mp_3 extends Application {
         /////////////////////////////////////////////////
     }
   
-
-    }    
+  public void muteSound()
+  {
+      volslider.setValue(0);
+  }
+  public void removesong()
+  {
+    if(count2==1){
+          listview.setOnMouseClicked((MouseEvent e) ->
+        {
+           if(e.getClickCount()==1)
+           {
+             // arraylist.add(chosen.get(0).getAbsolutePath());
+              String path=listview.getSelectionModel().getSelectedItem();
+               double index=listview.getSelectionModel().getSelectedIndex();
+               for (int i = 0; i < arraylist.size(); i++) {
+                   if(i==index)
+                   {
+                        arraylist.remove(i);
+                       // listview.getSelectionModel().
+            //  double irndex=listview.getSelectionModel().getSelectedIndex();      
+          
+                     }
+  
+                     }
+                  }
+        });    
+       }
+      }
+  
+  
+  
+  
+ }
    // Duration currentTime = mediaPlayer.getCurrentTime();
     //time.setText(formatTime(currentTime, duration));
     public static void main(String[] args) {

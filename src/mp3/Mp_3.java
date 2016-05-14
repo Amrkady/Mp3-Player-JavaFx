@@ -231,26 +231,34 @@ public class Mp_3 extends Application {
          sound.setStyle("-fx-background-color:#3e3737");
        // sound.setFitWidth(45);
        // sound.setFitHeight(45);
+         ImageView imageSound = new ImageView(
+                new Image("images/sound.png"));
+        imageSound.setFitWidth(45);
+        imageSound.setFitHeight(45);
+         sound.setGraphic(imageSound);
+           
+            ImageView imagemuteSound = new ImageView(
+                new Image("images/mute.png"));
+        imagemuteSound.setFitWidth(45);
+        imagemuteSound.setFitHeight(45);
+         root.getChildren().add(sound);
          sound.setOnAction(e -> {
              if(flag){
                  flag=false;
                  cl.muteSound();
+                 sound.setGraphic(imagemuteSound);
              }
              else
              {
                  flag=true;
                 volslider.setValue(200);
+                 sound.setGraphic(imageSound);
              }
            
          });
-        ImageView imageSound = new ImageView(
-                new Image("images/sound.png"));
-        imageSound.setFitWidth(45);
-        imageSound.setFitHeight(45);
-          sound.setGraphic(imageSound);
-           root.getChildren().add(sound);
-        //root.getChildren().add(soundImage);
-          StackPane root2 = new StackPane();
+        
+           
+          
           
           ImageView imagemusic = new ImageView(
                 new Image("images/music.png"));
@@ -705,26 +713,17 @@ public class Mp_3 extends Application {
   }
   public void removesong()
   {
-    if(count2==1){
-          listview.setOnMouseClicked((MouseEvent e) ->
-        {
-           if(e.getClickCount()==1)
-           {
-             // arraylist.add(chosen.get(0).getAbsolutePath());
-              String path=listview.getSelectionModel().getSelectedItem();
-               double index=listview.getSelectionModel().getSelectedIndex();
-               for (int i = 0; i < arraylist.size(); i++) {
-                   if(i==index)
-                   {
-                        arraylist.remove(i);
-                       // listview.getSelectionModel().
-            //  double irndex=listview.getSelectionModel().getSelectedIndex();      
-          
-                     }
-  
-                     }
-                  }
-        });    
+     int index=0;
+          if(count2==1){
+              
+               if(listview.getSelectionModel().getSelectedIndex()>=0){
+                    if(listview.getSelectionModel().getSelectedIndex()==0)
+                         forward();
+                        arraylist.remove(listview.getSelectionModel().getSelectedIndex());
+                        listview.getItems().remove(listview.getSelectionModel().getSelectedIndex());
+               }
+               if(count>index)
+                   count--;
        }
       }
   

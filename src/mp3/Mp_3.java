@@ -425,28 +425,35 @@ public class Mp_3 extends Application {
          count2=1;
         try{
         arraylist = new ArrayList<>();
-         //  DirectoryChooser chooser = new DirectoryChooser();
-       // chooser.setInitialDirectory(Datastore.getInstance().getDataDir().toFile());
-        FileChooser fc = new FileChooser();
-        List<File> chosen = fc.showOpenMultipleDialog(null);
-
+           DirectoryChooser chooser = new DirectoryChooser();
+               
+            FileChooser fc1 = new FileChooser();
+      
+               
+             File fc = chooser.showDialog(null);
+               
+             File[] chosen = fc.listFiles();
+                  
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
        // listview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listview.getItems().clear();
-        for (int i = 0; i < chosen.size(); i++) {
-            arraylist.add(chosen.get(i).getAbsolutePath());
+        for (int i = 0; i < chosen.length; i++) {
+             String ext= chosen[i].getName();
+                 ext= fileExtension(ext);
+             //System.out.println("name "+ ext);
+           if(ext.equals("mp3")   || ext.equals("mp4")||ext.equals("M4A") )
+           {
+           
+            arraylist.add(chosen[i].getAbsolutePath());
              
-            listview.getItems().add(chosen.get(i).getName());
-              
-            
-
-
+            listview.getItems().add(chosen[i].getName());
+           }
         }
         
 
-        String path = chosen.get(0).getAbsolutePath();
+        String path = chosen[0].getAbsolutePath();
 
         media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
@@ -462,7 +469,17 @@ public class Mp_3 extends Application {
         catch (Exception ex){}
   
     }
-
+     public String fileExtension(String filename)
+      { 
+          String fileextension="";
+          filename=filename.trim();
+        for(int i=0; i<filename.length();i++)
+        {
+          if(filename.charAt(i)=='.')
+              fileextension= filename.substring(i+1,filename.length());
+        }
+      return fileextension;
+      }
     public void replay() {
       
         try{

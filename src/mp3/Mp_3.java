@@ -1,41 +1,33 @@
 package mp3;
-
-
-
-
 import java.io.File;
 import static java.lang.Math.floor;
 import java.util.ArrayList;
-
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.scene.image.Image;
-
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
 import javafx.scene.layout.StackPane;
-
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.DirectoryChooser;
-
 import javafx.stage.FileChooser;
-
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.swing.JTable;
-
+/**
+* The Mp_3  class extends from Application
+* and it contain all design of the project
+*and contain start function.
+*/
 public class Mp_3 extends Application {
-    //JTable tb=new JTable ();
     GridPane pn=new GridPane();
    StackPane root = new StackPane();
    Label songTimer;
@@ -54,7 +46,9 @@ public class Mp_3 extends Application {
     int count= 0, count2=0,count3=0;
     boolean flag=true;
       private Listplay ls; 
-    
+/**
+* This function 
+*/    
     @Override
     public void start(Stage primaryStage) {
           ls=new Listplay ();
@@ -87,8 +81,6 @@ public class Mp_3 extends Application {
         menuBar.setStyle("-fx-background-color:#ff8c00");//#3e3737
         menuBar.setTranslateX(-200);
         menuBar.setTranslateY(-170);
-
-       
        root.getChildren().add(menuBar);
          play = new Button();
 
@@ -152,12 +144,7 @@ public class Mp_3 extends Application {
                 new Image("images/stop.png"));
         imageStop.setFitWidth(45);
         imageStop.setFitHeight(45);
-
-///////////////////////////////////////////////////////////////////////
-        
-        
-    
-        play.setStyle("-fx-background-color:#3e3737");
+      play.setStyle("-fx-background-color:#3e3737");
         play.setOnAction(e ->
         {
             if(count2==1){
@@ -352,10 +339,6 @@ public class Mp_3 extends Application {
         
          
          pn.setStyle("-fx-background-color:#3e3737");//221f1f//3e3737
-       // pn.setStyle();
-       /////////////////////////////////////////////////////////////////////////////////////////
-         
-        
          
            time =new Label();
         time.setStyle("-fx-background-color:gray");
@@ -376,7 +359,9 @@ public class Mp_3 extends Application {
         primaryStage.show();
     }
 
-
+/**
+* This class contained run function that call the forward function.
+*/
      public class Listplay implements Runnable
      {
 
@@ -392,7 +377,14 @@ public class Mp_3 extends Application {
              
         }
     }
+  /**
+* This class contained all function that dealing with the sound
+* such as add  and open file and replay and play and stop ...etc.
+*/
     public class Controller {  
+/**
+* This function is  used to open window to select one song.
+*/    
     public void add() {
          try{
        FileChooser fc = new FileChooser();
@@ -403,6 +395,9 @@ public class Mp_3 extends Application {
          }catch (Exception  ex)
                  {}
     }
+/**
+* This function is  used to open window to select one song.
+*/    
     public void openFile() {
         count2=1;
         try{
@@ -431,7 +426,9 @@ public class Mp_3 extends Application {
         catch (Exception ex){}
        
     }
-
+/**
+* This function is  used to open window to select many of songs.
+*/
     public void openDirectory() {
          count2=1;
         try{
@@ -480,7 +477,10 @@ public class Mp_3 extends Application {
         catch (Exception ex){}
   
     }
-     public String fileExtension(String filename)
+/**
+* This function is  used to open window to select many of songs.
+*/
+    public String fileExtension(String filename)
       { 
           String fileextension="";
           filename=filename.trim();
@@ -491,7 +491,10 @@ public class Mp_3 extends Application {
         }
       return fileextension;
       }
-    public void replay() {
+/**
+* This function is  used to replay the selected and running song.
+*/
+     public void replay() {
       
         try{
         mediaPlayer.seek(mediaPlayer.getStartTime());
@@ -499,7 +502,9 @@ public class Mp_3 extends Application {
         }
         catch (Exception ex){}
     }
-
+/**
+* This function is  used to move from the current song to the previous song..
+*/
     public void backward() {
         try{
         if (count > 0) {
@@ -517,7 +522,9 @@ public class Mp_3 extends Application {
         catch (Exception ex){}
 
     }
-
+/**
+* This function is  used to move from the current song to the next song.
+*/
     public void forward() {
         try{
         if (count < arraylist.size() - 1) {
@@ -538,7 +545,9 @@ public class Mp_3 extends Application {
         catch (Exception ex){}
 
     }
-
+/**
+* This function is  used to run the paused selected song.
+*/
     public void play() {
         try{
              mediaPlayer.play();
@@ -547,15 +556,19 @@ public class Mp_3 extends Application {
         }
         catch (Exception ex){}
     }
-
+/**
+* This function is  used to paused the current running song.
+*/
     public void stop() {
         try{
         mediaPlayer.pause();
         }
         catch (Exception ex){}
     }
-    
-     public void timeSlider()
+/**
+* This function is responsible for the time of the running song.
+*/
+    public void timeSlider()
     {
     
     try{
@@ -585,7 +598,9 @@ public class Mp_3 extends Application {
     }
     catch (Exception ex){}
     }
-    
+/**
+* This function is responsible for the degree of the volume of running song.
+*/
     public void volumeSlider()
     {
     try{
@@ -600,8 +615,10 @@ public class Mp_3 extends Application {
     }
     catch (Exception ex){}
     }
-
-  public void updateValues() {
+/**
+* This function is responsible for update the finished time of the running song.
+*/
+    public void updateValues() {
      if (time != null && timeslider != null && duration != null) {
          Platform.runLater(() -> {
             Duration currentTime = mediaPlayer.getCurrentTime();
@@ -613,6 +630,12 @@ public class Mp_3 extends Application {
 });
 }
 }
+/**
+ * This method is responsible for appearing the time in specific format
+ * @param elapsed This is the first parameter to formatTime method
+ * @param duration This is the second parameter to formatTime method
+ * @return String This returns format  of time.
+ */
    private  String formatTime(Duration elapsed, Duration duration) {
      int intElapsed = (int) floor(elapsed.toSeconds());
      int elapsedHours = intElapsed / (60 * 60);
@@ -651,6 +674,10 @@ public class Mp_3 extends Application {
                      }
     }
    }
+/**
+*this function when we selected many of songs and one running when it finished
+* move to the next song automatically
+*/
          public   void listPlay()
     {    
         
@@ -697,7 +724,10 @@ public class Mp_3 extends Application {
         
          
     }
-           public void timer() {
+/**
+*this function call update values function.  
+*/
+         public void timer() {
         mediaPlayer.currentTimeProperty().addListener((Observable ov) -> {
             updateValues();
         });
@@ -709,11 +739,16 @@ public class Mp_3 extends Application {
         
         /////////////////////////////////////////////////
     }
-  
-  public void muteSound()
+/**
+*this function used to mute the sound of the song and if it muted this function appear .  
+*/  
+         public void muteSound()
   {
       volslider.setValue(0);
   }
+/**
+*this function used to when select song and use this function the song deleted from the list of songs.  
+*/  
   public void removesong()
   {
      int index=0;
@@ -734,8 +769,13 @@ public class Mp_3 extends Application {
   
   
  }
-   // Duration currentTime = mediaPlayer.getCurrentTime();
-    //time.setText(formatTime(currentTime, duration));
+/**
+* The Mp_3  program implements an application that
+* dealing with mp3 player.
+* @author Our team
+* @version 1.0
+* @since 2016-4-31
+*/
     public static void main(String[] args) {
         launch(args);
     }

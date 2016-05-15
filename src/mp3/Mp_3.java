@@ -6,7 +6,7 @@ package mp3;
 import java.io.File;
 import static java.lang.Math.floor;
 import java.util.ArrayList;
-import java.util.List;
+
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
@@ -130,10 +130,10 @@ public class Mp_3 extends Application {
           removeSong.setTranslateY(-170);
           
          root.getChildren().add(removeSong);
-//         removeSong.setOnAction(e ->
-//        { 
-//            cl.removesong();
-//        });
+         removeSong.setOnAction(e ->
+        { 
+            cl.removesong();
+        });
         ////////////////
         Button add = new Button();
         ImageView imageadd = new ImageView(

@@ -768,7 +768,7 @@ public class Mp_3 extends Application {
   
   
   
- }
+ };
 /**
 * The Mp_3  program implements an application that
 * dealing with mp3 player.

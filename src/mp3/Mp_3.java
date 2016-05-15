@@ -406,13 +406,16 @@ public class Mp_3 extends Application {
     public void openFile() {
         count2=1;
         try{
-
+              
         FileChooser fc = new FileChooser();
         //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp3"));
         File chosen = fc.showOpenDialog(null);
         String path = chosen.getAbsolutePath();
+       
         listview.getItems().clear();
+          arraylist=new ArrayList();
         listview.getItems().add(chosen.getName());
+         arraylist.add(path);
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }

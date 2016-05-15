@@ -203,7 +203,7 @@ public class Mp_3 extends Application {
         root.getChildren().add(forward);
 
         volslider = new Slider();
-        volslider.setMaxSize(100, 10);
+        volslider.setMaxSize(100,10);
         volslider.setTranslateX(150);
         volslider.setTranslateY(130);
         root.getChildren().add(volslider);
@@ -262,6 +262,14 @@ public class Mp_3 extends Application {
          songname.setStyle("-fx-text-fill:#ff8c00;");
          songname.setTranslateX(-20);
          songname.setTranslateY(-30);
+         Label name=new Label("Elkady");
+         name.setScaleX(3);
+         name.setScaleY(3);
+         
+         name.setStyle("-fx-text-fill:#ff8c00;");
+         name.setTranslateX(150);
+         name.setTranslateY(-10);
+           root.getChildren().add(name);
          //imagemusic.setGraphic(imagemusic);
 //          
          Label mp3=new Label("MP3");
@@ -281,14 +289,14 @@ public class Mp_3 extends Application {
           root_2.getChildren().add(songname);
           root_2.getChildren().add(mp3);
              cl.listPlay();
-         
+           
         
             viewlist.setOnAction(e -> 
              {
                 if(count3==0) 
                 {
                    count3=1; 
-                   root_2.getChildren().removeAll(songname,mp3);
+                   root_2.getChildren().removeAll(songname,mp3,name);
                    root_2.getChildren().add(listview);
                  }
                  else
@@ -683,7 +691,7 @@ public class Mp_3 extends Application {
         
         listview.setOnMouseClicked((MouseEvent e) ->
         {
-           if(e.getClickCount()>1)
+           if(e.getClickCount()==2)
            {
              // arraylist.add(chosen.get(0).getAbsolutePath());
               String path=listview.getSelectionModel().getSelectedItem();

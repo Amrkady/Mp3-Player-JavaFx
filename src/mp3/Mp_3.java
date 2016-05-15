@@ -478,7 +478,7 @@ public class Mp_3 extends Application {
   
     }
 /**
-* This function is  used to open window to select many of songs.
+* This function return file extension.
 */
     public String fileExtension(String filename)
       { 
